@@ -1,0 +1,44 @@
+---
+title: "Napoleon Visualization HW2"
+output: html_document
+date: "2025-02-03"
+---
+```{r}
+library(tidyverse)
+library(ggplot2)
+library(lubridate)
+```
+
+
+```{r}
+cities = read.table("cities.txt", header=TRUE, stringsAsFactors=FALSE)
+troops = read.table("troops.txt", header=TRUE, stringsAsFactors=FALSE)
+temps = read.table("temps.txt", header=TRUE, stringsAsFactors=FALSE)
+dates = dmy(paste0(substr(temps$date, 1, 2), "-", substr(temps$date, 3, 5), "-", substr(temps$date, 6, 9)))
+formatted.dates = format(dates, "%d %b")
+```
+
+
+```{r fig.width=14, fig.height=4}
+ggplot(data=temps, aes(x=long,y=temp)) + geom_line() + geom_text(aes(label=formatted.dates)) + xlim(24, 39)
+```
+
+
+```{r fig.width=14, fig.height=4}
+ggplot(troops, aes(x=long, y=lat, group=group, color=direction, size=survivors)) + 
+  geom_path(lineend="round") +
+  geom_point(data=cities, aes(x=long, y=lat, group=NULL, color=NULL, size=NULL)) +
+  geom_text(data=cities, aes(x=long, y=lat, label=city, group=NULL, color=NULL, size=NULL, vjust=0.75, hjust=-0.1)) + 
+  scale_color_manual(values=c("darkgrey", "red")) + 
+  scale_size_continuous(breaks = seq(50000, 300000, length.out = 6)) +
+  xlim(c(24, 39))
+```
+
+
+```{r}
+```
+
+
+```{r}
+```
+
